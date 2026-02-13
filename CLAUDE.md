@@ -37,6 +37,7 @@ Czech baby name selection webapp built with plain HTML, CSS, and JavaScript. Dis
 13. Remove aux/ files from memory (use only for regenerating jmena.json)
 14. Create this CLAUDE.md documentation file
 15. Encode active filters to URL for sharing links with filter states
+16. Add clickable regex status that shows info box with basic regex pattern explanations
 
 ## Current Implementation Status
 
@@ -92,6 +93,12 @@ function looksLikeRegex(str) {
     return /[\^\$\*\+\?\{\}\[\]\(\)\|\\]/.test(str);
 }
 ```
+
+When a regex pattern is detected, the search status displays "🎯 Regulární výraz" (Regular Expression) as clickable text. Clicking it toggles an info box that explains basic regex patterns:
+- `^` - start of string (e.g., `^M` = names starting with M)
+- `$` - end of string (e.g., `a$` = names ending with a)
+- `.` - any character
+- `*` - previous character 0 or more times (e.g., `.*` = any characters)
 
 ### Fisher-Yates Shuffle for Unbiased Random Selection
 ```javascript

@@ -80,6 +80,31 @@ header h1 {
     display: none;
 }
 
+.regex-info-box {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    margin-top: 8px;
+    border: 1px solid rgba(102, 126, 234, 0.3);
+    line-height: 1.6;
+    color: #333;
+}
+
+.regex-info-box code {
+    background: rgba(102, 126, 234, 0.1);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.95em;
+    color: #667eea;
+    font-weight: 600;
+}
+
+.regex-info-box.hidden {
+    display: none;
+}
+
 .controls {
     background: white;
     padding: 20px;
@@ -149,6 +174,11 @@ header h1 {
 
 .search-status.regex-mode {
     color: #667eea;
+    cursor: pointer;
+}
+
+.search-status.regex-mode:hover {
+    text-decoration: underline;
 }
 
 .search-status.text-mode {

@@ -100,7 +100,7 @@ function loadFiltersFromURL() {
             if (looksLikeRegex(search)) {
                 try {
                     new RegExp(search, 'i');
-                    searchStatus.textContent = '🎯 Regex';
+                    searchStatus.textContent = '🎯 Regulární výraz';
                     searchStatus.className = 'search-status regex-mode';
                 } catch (error) {
                     searchStatus.textContent = '⚠️ Neplatný regex (hledám jako text)';
@@ -351,23 +351,27 @@ function setupEventListeners() {
 
     searchInput.addEventListener('input', (e) => {
         currentSearch = e.target.value;
+        const regexInfoBox = document.getElementById('regexInfoBox');
 
         // Update status indicator
         if (!currentSearch) {
             searchStatus.textContent = '';
             searchStatus.className = 'search-status';
+            regexInfoBox.classList.add('hidden');
         } else if (looksLikeRegex(currentSearch)) {
             try {
                 new RegExp(currentSearch, 'i');
-                searchStatus.textContent = '🎯 Regex';
+                searchStatus.textContent = '🎯 Regulární výraz';
                 searchStatus.className = 'search-status regex-mode';
             } catch (error) {
                 searchStatus.textContent = '⚠️ Neplatný regex (hledám jako text)';
                 searchStatus.className = 'search-status text-mode';
+                regexInfoBox.classList.add('hidden');
             }
         } else {
             searchStatus.textContent = '🔍 Textové hledání';
             searchStatus.className = 'search-status text-mode';
+            regexInfoBox.classList.add('hidden');
         }
 
         displayNames();
@@ -391,8 +395,21 @@ function setupEventListeners() {
         searchStatus.textContent = '';
         searchStatus.className = 'search-status';
 
+        // Hide regex info box
+        const regexInfoBox = document.getElementById('regexInfoBox');
+        regexInfoBox.classList.add('hidden');
+
         // Refresh display (keeps current gender filter)
         displayNames();
+    });
+
+    // Regex info box toggle
+    const regexInfoBox = document.getElementById('regexInfoBox');
+    searchStatus.addEventListener('click', (e) => {
+        // Only toggle if it's in regex mode
+        if (searchStatus.classList.contains('regex-mode')) {
+            regexInfoBox.classList.toggle('hidden');
+        }
     });
 
     // Info icon toggle
