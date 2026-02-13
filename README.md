@@ -17,10 +17,12 @@ Aplikace obsahuje 11,471 českých jmen rozdělených do tří kategorií:
 
 ## Filtrování
 
-- **Všechna**: Zobrazí všechna jména (11,471)
-- **Chlapci**: Zobrazí jména pro chlapce + neutrální jména (7,436)
-- **Dívky**: Zobrazí jména pro dívky + neutrální jména (8,343)
-- **Neutrální**: Zobrazí pouze neutrální jména (4,308)
+- **Všechna**: Zobrazí náhodný výběr jmen ze všech 11,471
+- **Chlapci**: Zobrazí náhodný výběr z jmen pro chlapce + neutrální jména (celkem 7,436)
+- **Dívky**: Zobrazí náhodný výběr z jmen pro dívky + neutrální jména (celkem 8,343)
+- **Neutrální**: Zobrazí náhodný výběr z neutrálních jmen (celkem 4,308)
+
+**Poznámka**: Bez aktivního vyhledávání se zobrazuje náhodných 24 jmen, aby se vešly na obrazovku. Při vyhledávání se zobrazí všechny odpovídající výsledky.
 
 ## Jak hledat
 

@@ -66,20 +66,45 @@ function getFilteredNames() {
     return filtered;
 }
 
+// Get random subset of names using Fisher-Yates shuffle
+function getRandomSubset(arr, count) {
+    const result = [];
+    const copy = [...arr];
+    const n = Math.min(count, copy.length);
+
+    for (let i = 0; i < n; i++) {
+        const randomIndex = Math.floor(Math.random() * (copy.length - i)) + i;
+        [copy[i], copy[randomIndex]] = [copy[randomIndex], copy[i]];
+        result.push(copy[i]);
+    }
+
+    return result;
+}
+
 // Display names in the grid
 function displayNames() {
     const filtered = getFilteredNames();
     const grid = document.getElementById('namesGrid');
     const resultsCount = document.getElementById('resultsCount');
 
-    // Update results count
-    resultsCount.textContent = `${filtered.length} ${filtered.length === 1 ? 'jméno' : filtered.length < 5 ? 'jména' : 'jmen'}`;
+    // If no search is active and results are large, show random subset
+    let namesToDisplay = filtered;
+    const randomSubsetSize = 24;
+    const showRandomSubset = !currentSearch && filtered.length > randomSubsetSize;
+
+    if (showRandomSubset) {
+        namesToDisplay = getRandomSubset(filtered, randomSubsetSize);
+        resultsCount.textContent = `${randomSubsetSize} náhodných jmen z ${filtered.length}`;
+    } else {
+        // Update results count
+        resultsCount.textContent = `${filtered.length} ${filtered.length === 1 ? 'jméno' : filtered.length < 5 ? 'jména' : 'jmen'}`;
+    }
 
     // Clear grid
     grid.innerHTML = '';
 
     // Add filtered names
-    filtered.forEach(name => {
+    namesToDisplay.forEach(name => {
         const card = document.createElement('div');
         card.className = 'name-card';
 
