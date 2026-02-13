@@ -1,6 +1,8 @@
 let allNames = [];
 let currentFilter = 'all';
 let currentSearch = '';
+let selectedFirstLetter = null;
+let selectedContainsLetters = [];
 
 // Load names from JSON file
 async function loadNames() {
@@ -186,6 +188,119 @@ function setupEventListeners() {
             infoBox.classList.toggle('hidden');
         });
     }
+
+    // Alphabet filter toggle (first letter)
+    const alphabetToggle = document.getElementById('alphabetToggle');
+    const alphabetFilter = document.getElementById('alphabetFilter');
+
+    alphabetToggle.addEventListener('click', () => {
+        alphabetFilter.classList.toggle('hidden');
+        alphabetToggle.classList.toggle('active');
+    });
+
+    // Contains filter toggle
+    const containsToggle = document.getElementById('containsToggle');
+    const containsFilter = document.getElementById('containsFilter');
+
+    containsToggle.addEventListener('click', () => {
+        containsFilter.classList.toggle('hidden');
+        containsToggle.classList.toggle('active');
+    });
+
+    // Build combined search pattern from selected letters
+    function buildLetterPattern() {
+        let pattern = '';
+
+        if (selectedFirstLetter) {
+            pattern = `^${selectedFirstLetter}`;
+        } else {
+            pattern = '^';
+        }
+
+        // Add lookaheads for each contains letter (ensures all are present in any order)
+        if (selectedContainsLetters.length > 0) {
+            const lookaheads = selectedContainsLetters.map(letter => `(?=.*${letter})`).join('');
+            pattern += lookaheads;
+        }
+
+        pattern += '.*';
+
+        // Only return pattern if we have at least one filter selected
+        if (selectedFirstLetter || selectedContainsLetters.length > 0) {
+            return pattern;
+        }
+
+        return '';
+    }
+
+    // Update search input with combined pattern
+    function updateSearchFromLetters() {
+        const pattern = buildLetterPattern();
+        searchInput.value = pattern;
+        searchInput.dispatchEvent(new Event('input'));
+    }
+
+    // Generate alphabet filter letters
+    const alphabet = 'AÁBCČDĎEÉĚFGHIÍJKLMNŇOÓPQRŘSŠTŤUÚŮVWXYÝZŽ'.split('');
+
+    // First letter filter
+    alphabet.forEach(letter => {
+        const btn = document.createElement('button');
+        btn.className = 'letter-btn';
+        btn.textContent = letter;
+        btn.dataset.letter = letter;
+        btn.addEventListener('click', () => {
+            // Toggle selection
+            if (selectedFirstLetter === letter) {
+                selectedFirstLetter = null;
+                btn.classList.remove('active');
+            } else {
+                selectedFirstLetter = letter;
+                // Visual feedback
+                document.querySelectorAll('.letter-btn:not(.contains-letter-btn)').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            }
+            updateSearchFromLetters();
+        });
+        alphabetFilter.appendChild(btn);
+    });
+
+    // Contains letter filter (allows multiple selections)
+    alphabet.forEach(letter => {
+        const btn = document.createElement('button');
+        btn.className = 'letter-btn contains-letter-btn';
+        btn.textContent = letter;
+        btn.dataset.letter = letter;
+        btn.addEventListener('click', () => {
+            // Toggle selection in array
+            const index = selectedContainsLetters.indexOf(letter);
+            if (index > -1) {
+                // Remove from selection
+                selectedContainsLetters.splice(index, 1);
+                btn.classList.remove('active');
+            } else {
+                // Add to selection
+                selectedContainsLetters.push(letter);
+                btn.classList.add('active');
+            }
+            updateSearchFromLetters();
+        });
+        containsFilter.appendChild(btn);
+    });
+
+    // Clear active letter when search is manually changed
+    searchInput.addEventListener('input', () => {
+        const currentPattern = searchInput.value;
+        const expectedPattern = buildLetterPattern();
+
+        // Only clear if the search was manually changed (doesn't match our pattern)
+        if (currentPattern !== expectedPattern) {
+            // Clear all selections if search was manually edited
+            selectedFirstLetter = null;
+            selectedContainsLetters = [];
+            document.querySelectorAll('.letter-btn').forEach(b => b.classList.remove('active'));
+        }
+    });
 
     // Regex example buttons
     const exampleButtons = document.querySelectorAll('.regex-example');

@@ -5,6 +5,9 @@ Jednoduchá webová aplikace pro procházení a výběr českých jmen pro mimin
 ## Funkce
 
 - 🔍 Inteligentní vyhledávání (automaticky rozpozná regex)
+- 🔤 Filtrování podle prvního písmene (kliknutím na písmeno)
+- 🔍 Filtrování podle obsažených písmen (vyberte více písmen - jméno musí obsahovat všechna)
+- 🔀 Kombinovatelné filtry (můžete použít oba filtry písmen najednou)
 - 👶 Filtrování podle pohlaví (chlapci/dívky/neutrální)
 - 📱 Responzivní design
 
@@ -27,6 +30,25 @@ Aplikace obsahuje 11,471 českých jmen rozdělených do tří kategorií:
 ## Jak hledat
 
 Aplikace automaticky rozpozná, zda hledáte běžný text nebo používáte regulární výraz.
+
+**Filtrování podle prvního písmene:**
+- Klikněte na tlačítko "🔤 Filtrovat podle prvního písmene" pro zobrazení abecedy
+- Vyberte libovolné písmeno (A-Ž) pro zobrazení jmen začínajících tímto písmenem
+- Kliknutím na stejné písmeno zrušíte výběr
+- Ideální pro uživatele, kteří neznají regulární výrazy
+
+**Filtrování podle obsažených písmen:**
+- Klikněte na tlačítko "🔍 Filtrovat podle obsažených písmen" pro zobrazení abecedy
+- Můžete vybrat **více písmen** - jméno musí obsahovat všechna vybraná písmena
+- Kliknutím na stejné písmeno zrušíte výběr
+- Například:
+  - Výběr "L" najde Klára, Libuše, Emil, Oldřich
+  - Výběr "R" + "K" najde Karel, Marek, Mirka (obsahují obě písmena)
+
+**Kombinace filtrů:**
+- Můžete kombinovat všechny filtry najednou!
+- Například: První písmeno "M" + obsahuje "R" + "K" = najde Marek, Mirka
+- Funguje i s filtrem pohlaví (chlapci/dívky/neutrální)
 
 **Běžné vyhledávání:**
 - Zadejte `adam` → najde Adam, Adamec, atd.

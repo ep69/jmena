@@ -143,6 +143,85 @@ header h1 {
     border-bottom-color: #764ba2;
 }
 
+.alphabet-filter-container {
+    margin-bottom: 20px;
+}
+
+.alphabet-toggle-btn {
+    width: 100%;
+    padding: 10px 16px;
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #333;
+}
+
+.alphabet-toggle-btn:hover {
+    border-color: #667eea;
+    background: #f8f8ff;
+}
+
+.alphabet-toggle-btn.active {
+    border-color: #667eea;
+    background: #f0f0ff;
+}
+
+.toggle-arrow {
+    font-size: 12px;
+    transition: transform 0.3s;
+}
+
+.alphabet-toggle-btn.active .toggle-arrow {
+    transform: rotate(180deg);
+}
+
+.alphabet-filter {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+    padding: 12px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.alphabet-filter.hidden {
+    display: none;
+}
+
+.letter-btn {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #333;
+}
+
+.letter-btn:hover {
+    background: #f0f0f0;
+    border-color: #667eea;
+}
+
+.letter-btn.active {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
 .regex-examples {
     display: flex;
     gap: 8px;
