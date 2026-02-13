@@ -1,8 +1,18 @@
+const GRID_MIN_COLUMN_WIDTH = 200;
+const GRID_GAP = 15;
+const TARGET_ROWS = 5;
+const SIDE_BY_SIDE_BREAKPOINT = 768;
+
 let allNames = [];
 let currentFilter = 'all';
 let currentSearch = '';
 let selectedFirstLetter = null;
 let selectedContainsLetters = [];
+
+// Check if filters are side by side (based on screen width)
+function areFiltersSideBySide() {
+    return window.innerWidth > SIDE_BY_SIDE_BREAKPOINT;
+}
 
 // Parse search pattern to extract letter filter components
 function parseLetterPattern(pattern) {
@@ -129,30 +139,32 @@ function loadFiltersFromURL() {
             const containsFilter = document.getElementById('containsFilter');
             const containsToggle = document.getElementById('containsToggle');
 
-            // Check if filters are side by side
-            const areSideBySide = window.innerWidth > 768;
             const shouldUnfoldFirst = letterPattern.firstLetter;
             const shouldUnfoldContains = letterPattern.containsLetters.length > 0;
 
             // If side-by-side and at least one needs unfolding, unfold both
-            if (areSideBySide && (shouldUnfoldFirst || shouldUnfoldContains)) {
+            if (areFiltersSideBySide() && (shouldUnfoldFirst || shouldUnfoldContains)) {
                 if (alphabetFilter && alphabetToggle) {
                     alphabetFilter.classList.remove('hidden');
                     alphabetToggle.classList.add('active');
+                    alphabetToggle.setAttribute('aria-expanded', 'true');
                 }
                 if (containsFilter && containsToggle) {
                     containsFilter.classList.remove('hidden');
                     containsToggle.classList.add('active');
+                    containsToggle.setAttribute('aria-expanded', 'true');
                 }
             } else {
                 // Not side-by-side, unfold individually
                 if (shouldUnfoldFirst && alphabetFilter && alphabetToggle) {
                     alphabetFilter.classList.remove('hidden');
                     alphabetToggle.classList.add('active');
+                    alphabetToggle.setAttribute('aria-expanded', 'true');
                 }
                 if (shouldUnfoldContains && containsFilter && containsToggle) {
                     containsFilter.classList.remove('hidden');
                     containsToggle.classList.add('active');
+                    containsToggle.setAttribute('aria-expanded', 'true');
                 }
             }
 
@@ -245,9 +257,9 @@ function capitalizeName(name) {
     // Handle composite names with hyphens and spaces
     return name
         .trim() // Remove leading/trailing whitespace
-        .split(/([- ])/) // Split on hyphens and spaces, but keep the delimiters
+        .split(/([- '])/) // Split on hyphens, spaces, and apostrophes, but keep the delimiters
         .map(part => {
-            if (part === '-' || part === ' ') {
+            if (part === '-' || part === ' ' || part === "'") {
                 return part; // Keep delimiters as-is
             }
             if (part === '') {
@@ -278,19 +290,16 @@ function getRandomSubset(arr, count) {
 function getGridColumnCount() {
     const grid = document.getElementById('namesGrid');
     const gridWidth = grid.offsetWidth;
-    const minColumnWidth = 200; // From CSS: minmax(200px, 1fr)
-    const gap = 15; // From CSS: gap: 15px
 
     // Calculate how many columns fit
-    const columns = Math.floor((gridWidth + gap) / (minColumnWidth + gap));
+    const columns = Math.floor((gridWidth + GRID_GAP) / (GRID_MIN_COLUMN_WIDTH + GRID_GAP));
     return Math.max(1, columns);
 }
 
 // Calculate optimal number of names to display (multiple of columns)
 function calculateRandomSubsetSize() {
     const columns = getGridColumnCount();
-    const targetRows = 5; // Aim for about 5 rows
-    return columns * targetRows;
+    return columns * TARGET_ROWS;
 }
 
 // Display names in the grid
@@ -316,6 +325,13 @@ function displayNames() {
 
     // Clear grid
     grid.innerHTML = '';
+
+    // Show empty state if no results
+    if (namesToDisplay.length === 0) {
+        grid.innerHTML = '<p class="no-results">Žádná jména nenalezena. Zkuste upravit nebo vymazat filtry.</p>';
+        updateURL();
+        return;
+    }
 
     // Add filtered names
     namesToDisplay.forEach(name => {
@@ -348,6 +364,7 @@ function setupEventListeners() {
     // Search input (handles both plain text and regex)
     const searchInput = document.getElementById('searchInput');
     const searchStatus = document.getElementById('searchStatus');
+    searchStatus.setAttribute('aria-live', 'polite');
 
     searchInput.addEventListener('input', (e) => {
         currentSearch = e.target.value;
@@ -372,6 +389,14 @@ function setupEventListeners() {
             searchStatus.textContent = '🔍 Textové hledání';
             searchStatus.className = 'search-status text-mode';
             regexInfoBox.classList.add('hidden');
+        }
+
+        // Clear letter selections if search was manually changed
+        const expectedPattern = buildLetterPattern();
+        if (currentSearch !== expectedPattern) {
+            selectedFirstLetter = null;
+            selectedContainsLetters = [];
+            document.querySelectorAll('.letter-btn').forEach(b => b.classList.remove('active'));
         }
 
         displayNames();
@@ -430,9 +455,10 @@ function setupEventListeners() {
     const containsToggle = document.getElementById('containsToggle');
     const containsFilter = document.getElementById('containsFilter');
 
-    // Check if filters are side by side (based on screen width)
-    function areFiltersSideBySide() {
-        return window.innerWidth > 768;
+    // Helper to sync aria-expanded on toggle buttons
+    function updateToggleAria(toggleBtn, filterEl) {
+        const expanded = !filterEl.classList.contains('hidden');
+        toggleBtn.setAttribute('aria-expanded', String(expanded));
     }
 
     alphabetToggle.addEventListener('click', () => {
@@ -454,6 +480,9 @@ function setupEventListeners() {
                 containsToggle.classList.remove('active');
             }
         }
+
+        updateToggleAria(alphabetToggle, alphabetFilter);
+        updateToggleAria(containsToggle, containsFilter);
     });
 
     containsToggle.addEventListener('click', () => {
@@ -475,6 +504,32 @@ function setupEventListeners() {
                 alphabetToggle.classList.remove('active');
             }
         }
+
+        updateToggleAria(alphabetToggle, alphabetFilter);
+        updateToggleAria(containsToggle, containsFilter);
+    });
+
+    // Sync filter open/close state on resize transitions
+    let wasSideBySide = areFiltersSideBySide();
+    window.addEventListener('resize', () => {
+        const isSideBySide = areFiltersSideBySide();
+        if (isSideBySide === wasSideBySide) return;
+        wasSideBySide = isSideBySide;
+
+        if (isSideBySide) {
+            // Transitioning to side-by-side: if either is open, open both
+            const alphabetOpen = !alphabetFilter.classList.contains('hidden');
+            const containsOpen = !containsFilter.classList.contains('hidden');
+            if (alphabetOpen || containsOpen) {
+                alphabetFilter.classList.remove('hidden');
+                alphabetToggle.classList.add('active');
+                containsFilter.classList.remove('hidden');
+                containsToggle.classList.add('active');
+            }
+        }
+
+        updateToggleAria(alphabetToggle, alphabetFilter);
+        updateToggleAria(containsToggle, containsFilter);
     });
 
     // Build combined search pattern from selected letters
@@ -556,20 +611,6 @@ function setupEventListeners() {
             updateSearchFromLetters();
         });
         containsFilter.appendChild(btn);
-    });
-
-    // Clear active letter when search is manually changed
-    searchInput.addEventListener('input', () => {
-        const currentPattern = searchInput.value;
-        const expectedPattern = buildLetterPattern();
-
-        // Only clear if the search was manually changed (doesn't match our pattern)
-        if (currentPattern !== expectedPattern) {
-            // Clear all selections if search was manually edited
-            selectedFirstLetter = null;
-            selectedContainsLetters = [];
-            document.querySelectorAll('.letter-btn').forEach(b => b.classList.remove('active'));
-        }
     });
 
     // Filter buttons
