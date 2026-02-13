@@ -143,8 +143,29 @@ header h1 {
     border-bottom-color: #764ba2;
 }
 
-.alphabet-filter-container {
+.alphabet-filters-wrapper {
+    display: flex;
+    gap: 15px;
     margin-bottom: 20px;
+}
+
+.alphabet-filter-container {
+    flex: 1;
+    min-width: 0;
+}
+
+@media (max-width: 768px) {
+    .alphabet-filters-wrapper {
+        flex-direction: column;
+    }
+
+    .alphabet-filter-container {
+        margin-bottom: 15px;
+    }
+
+    .alphabet-filter-container:last-child {
+        margin-bottom: 0;
+    }
 }
 
 .alphabet-toggle-btn {
