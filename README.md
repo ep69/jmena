@@ -4,9 +4,25 @@ Jednoduchá webová aplikace pro procházení a výběr českých jmen pro mimin
 
 ## Funkce
 
-- 🔍 Vyhledávání jmen
+- 🔍 Inteligentní vyhledávání (automaticky rozpozná regex)
 - 👶 Filtrování podle pohlaví (chlapci/dívky)
 - 📱 Responzivní design
+
+## Jak hledat
+
+Aplikace automaticky rozpozná, zda hledáte běžný text nebo používáte regulární výraz.
+
+**Běžné vyhledávání:**
+- Zadejte `adam` → najde Adam, Adamec, atd.
+
+**Regulární výrazy (automaticky rozpoznáno):**
+- `^A.*` - Jména začínající na A
+- `.*a$` - Jména končící na a
+- `^M.*[aá]$` - Jména začínající na M a končící na a nebo á
+- `^.{3}$` - Jména o přesně 3 znacích
+- `^(Dan|Jan).*` - Jména začínající Dan nebo Jan
+
+Aplikace zobrazí indikátor, zda používá textové hledání (🔍) nebo regex (🎯).
 
 ## Použití
 
