@@ -13,17 +13,19 @@ Jednoduchá webová aplikace pro procházení a výběr českých jmen pro mimin
 
 ## Data
 
-Aplikace obsahuje 11,471 českých jmen rozdělených do tří kategorií:
-- **Chlapci (kluk)**: 3,128 jmen
-- **Dívky (holka)**: 4,035 jmen
-- **Neutrální**: 4,308 jmen vhodných pro obě pohlaví
+Aplikace obsahuje 11,490 českých jmen rozdělených do tří kategorií:
+- **Chlapci (kluk)**: 3,136 jmen
+- **Dívky (holka)**: 4,036 jmen
+- **Neutrální**: 4,318 jmen vhodných pro obě pohlaví
+
+Data pochází z oficiálního otevřeného datasetu Ministerstva vnitra ČR (stav k 31. 1. 2026).
 
 ## Filtrování
 
-- **Všechna**: Zobrazí náhodný výběr jmen ze všech 11,471
-- **Chlapci**: Zobrazí náhodný výběr z jmen pro chlapce + neutrální jména (celkem 7,436)
-- **Dívky**: Zobrazí náhodný výběr z jmen pro dívky + neutrální jména (celkem 8,343)
-- **Neutrální**: Zobrazí náhodný výběr z neutrálních jmen (celkem 4,308)
+- **Všechna**: Zobrazí náhodný výběr jmen ze všech 11,490
+- **Chlapci**: Zobrazí náhodný výběr z jmen pro chlapce + neutrální jména (celkem 7,454)
+- **Dívky**: Zobrazí náhodný výběr z jmen pro dívky + neutrální jména (celkem 8,354)
+- **Neutrální**: Zobrazí náhodný výběr z neutrálních jmen (celkem 4,318)
 
 **Poznámka**: Bez aktivního vyhledávání se zobrazuje náhodných 24 jmen, aby se vešly na obrazovku. Při vyhledávání se zobrazí všechny odpovídající výsledky.
 
