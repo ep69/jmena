@@ -82,4 +82,10 @@ Pak otevřete http://localhost:8000 v prohlížeči.
 - `style.css` - Styly aplikace
 - `app.js` - JavaScript pro vyhledávání a filtrování
 - `jmena.json` - Data jmen ve formátu JSON
-- `jmena.csv` - Původní CSV soubor s daty
+- `data/` - Zdrojová data z Ministerstva vnitra ČR
+
+## GitHub
+
+Projekt je open source a dostupný na GitHubu: https://github.com/ep69/jmena
+
+Našli jste chybu nebo máte nápad na vylepšení? [Nahlaste issue](https://github.com/ep69/jmena/issues/new)!
