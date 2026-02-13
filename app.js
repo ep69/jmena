@@ -27,7 +27,15 @@ function getFilteredNames() {
 
     // Apply gender filter
     if (currentFilter !== 'all') {
-        filtered = filtered.filter(name => name.gender === currentFilter);
+        if (currentFilter === 'neutral') {
+            // Show only neutral names
+            filtered = filtered.filter(name => name.gender === 'neutral');
+        } else {
+            // For kluk/holka, include both specific gender and neutral names
+            filtered = filtered.filter(name =>
+                name.gender === currentFilter || name.gender === 'neutral'
+            );
+        }
     }
 
     // Apply search/regex filter
@@ -74,9 +82,20 @@ function displayNames() {
     filtered.forEach(name => {
         const card = document.createElement('div');
         card.className = 'name-card';
+
+        // Determine gender label and icon
+        let genderLabel;
+        if (name.gender === 'kluk') {
+            genderLabel = '👦 Chlapec';
+        } else if (name.gender === 'holka') {
+            genderLabel = '👧 Dívka';
+        } else {
+            genderLabel = '⚧ Neutrální';
+        }
+
         card.innerHTML = `
             <div class="name-text">${name.name}</div>
-            <div class="name-gender ${name.gender}">${name.gender === 'kluk' ? '👦 Chlapec' : '👧 Dívka'}</div>
+            <div class="name-gender ${name.gender}">${genderLabel}</div>
         `;
         grid.appendChild(card);
     });

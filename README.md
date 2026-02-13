@@ -5,8 +5,22 @@ Jednoduchá webová aplikace pro procházení a výběr českých jmen pro mimin
 ## Funkce
 
 - 🔍 Inteligentní vyhledávání (automaticky rozpozná regex)
-- 👶 Filtrování podle pohlaví (chlapci/dívky)
+- 👶 Filtrování podle pohlaví (chlapci/dívky/neutrální)
 - 📱 Responzivní design
+
+## Data
+
+Aplikace obsahuje 11,471 českých jmen rozdělených do tří kategorií:
+- **Chlapci (kluk)**: 3,128 jmen
+- **Dívky (holka)**: 4,035 jmen
+- **Neutrální**: 4,308 jmen vhodných pro obě pohlaví
+
+## Filtrování
+
+- **Všechna**: Zobrazí všechna jména (11,471)
+- **Chlapci**: Zobrazí jména pro chlapce + neutrální jména (7,436)
+- **Dívky**: Zobrazí jména pro dívky + neutrální jména (8,343)
+- **Neutrální**: Zobrazí pouze neutrální jména (4,308)
 
 ## Jak hledat
 
