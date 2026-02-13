@@ -277,7 +277,12 @@ if (currentFilter !== 'all') {
 
 ## Fixed Issues During Development
 
-1. **Biased Random Distribution**
+1. **UI Flash on Page Load with URL Filters**
+   - Problem: Brief flash showing default "Všechna" filter before switching to URL filter
+   - Fix: Removed default "active" class from HTML, JavaScript always sets initial state
+   - Fix: Call loadFiltersFromURL() before setupEventListeners() for earlier initialization
+
+2. **Biased Random Distribution**
    - Problem: Simple random selection was biased
    - Fix: Implemented proper Fisher-Yates shuffle algorithm
 

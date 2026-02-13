@@ -78,15 +78,15 @@ function loadFiltersFromURL() {
     const gender = params.get('gender');
     if (gender && ['all', 'kluk', 'holka', 'neutral'].includes(gender)) {
         currentFilter = gender;
-        // Update UI
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            if (btn.dataset.filter === gender) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
     }
+    // Always update UI (either from URL or default 'all')
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        if (btn.dataset.filter === currentFilter) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
 
     // Load search
     const search = params.get('search');
@@ -591,7 +591,7 @@ function setupEventListeners() {
 
 // Initialize app
 document.addEventListener('DOMContentLoaded', () => {
-    setupEventListeners();
     loadFiltersFromURL();
+    setupEventListeners();
     loadNames();
 });
