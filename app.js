@@ -198,6 +198,28 @@ function setupEventListeners() {
         displayNames();
     });
 
+    // Reset button
+    const resetBtn = document.getElementById('resetBtn');
+    resetBtn.addEventListener('click', () => {
+        // Clear search input
+        searchInput.value = '';
+        currentSearch = '';
+
+        // Clear selected letters
+        selectedFirstLetter = null;
+        selectedContainsLetters = [];
+
+        // Remove active class from all letter buttons
+        document.querySelectorAll('.letter-btn').forEach(btn => btn.classList.remove('active'));
+
+        // Clear search status
+        searchStatus.textContent = '';
+        searchStatus.className = 'search-status';
+
+        // Refresh display (keeps current gender filter)
+        displayNames();
+    });
+
     // Info icon toggle
     const infoIcon = document.querySelector('.info-icon');
     const infoBox = document.getElementById('infoBox');

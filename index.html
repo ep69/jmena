@@ -29,7 +29,14 @@
 
         <div class="controls">
             <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Hledat - podporuje regulární výrazy (např. ^M.* nebo .*a$)">
+                <div class="search-input-wrapper">
+                    <input type="text" id="searchInput" placeholder="Hledat - podporuje regulární výrazy (např. ^M.* nebo .*a$)">
+                    <button class="reset-btn" id="resetBtn" title="Vymazat všechny filtry">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                        </svg>
+                    </button>
+                </div>
                 <div class="search-status" id="searchStatus"></div>
             </div>
 
