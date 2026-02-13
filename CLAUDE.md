@@ -290,6 +290,21 @@ if (currentFilter !== 'all') {
    - Problem: Independent filter states on wide screens was inconsistent
    - Fix: Implemented synchronized open/close behavior for side-by-side display
 
+## TODO / Future Features
+
+### Shopping Cart for Favorite Names
+- Allow users to "like" or "save" names they're interested in
+- Display saved names in a separate section or overlay
+- Persist favorites using localStorage (client-side only)
+- Allow users to export/share their favorite names list
+- Add a heart icon or similar UI element to name cards
+- Show count of saved names in header/navigation
+- **URL Export/Import:**
+  - Export reasonable number of favorites as URL parameter (e.g., `?fav=Marie,Jan,Karel`)
+  - Parse URL on load to restore favorites from link
+  - Useful for sharing shortlists with partner/family
+  - Consider URL length limits (typically ~2000 chars, allows ~100-200 names)
+
 ## Links and Resources
 
 - **Official Data Source:** https://mv.gov.cz/clanek/seznam-jmen.aspx
