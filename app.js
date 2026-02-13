@@ -4,6 +4,178 @@ let currentSearch = '';
 let selectedFirstLetter = null;
 let selectedContainsLetters = [];
 
+// Parse search pattern to extract letter filter components
+function parseLetterPattern(pattern) {
+    if (!pattern) return null;
+
+    const result = {
+        firstLetter: null,
+        containsLetters: []
+    };
+
+    // Check if pattern matches our letter filter format: ^LETTER(?=.*L1)(?=.*L2).*
+    // Pattern must end with .*
+    if (!pattern.endsWith('.*')) {
+        return null;
+    }
+
+    let remaining = pattern.slice(0, -2); // Remove .* at end
+
+    // Check for first letter: ^LETTER
+    if (remaining.startsWith('^')) {
+        const firstLetterMatch = remaining.match(/^\^([A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ])/);
+        if (firstLetterMatch) {
+            result.firstLetter = firstLetterMatch[1];
+            remaining = remaining.slice(2); // Remove ^LETTER
+        } else {
+            remaining = remaining.slice(1); // Remove ^ only
+        }
+    }
+
+    // Extract contains letters: (?=.*LETTER)
+    const lookaheadPattern = /\(\?=\.\*([A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ])\)/g;
+    let match;
+    while ((match = lookaheadPattern.exec(remaining)) !== null) {
+        result.containsLetters.push(match[1]);
+    }
+
+    // Check if we consumed the entire pattern (validates it matches our format)
+    const reconstructed = remaining.replace(/\(\?=\.\*[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ]\)/g, '');
+    if (reconstructed !== '') {
+        return null; // Pattern has extra stuff we don't recognize
+    }
+
+    // Only return if we found at least one letter filter
+    if (result.firstLetter || result.containsLetters.length > 0) {
+        return result;
+    }
+
+    return null;
+}
+
+// Update URL with current filter state
+function updateURL() {
+    const params = new URLSearchParams();
+
+    if (currentFilter !== 'all') {
+        params.set('gender', currentFilter);
+    }
+
+    if (currentSearch) {
+        params.set('search', currentSearch);
+    }
+
+    const queryString = params.toString();
+    const newURL = queryString ? `?${queryString}` : window.location.pathname;
+    window.history.replaceState({}, '', newURL);
+}
+
+// Load filters from URL on page load
+function loadFiltersFromURL() {
+    const params = new URLSearchParams(window.location.search);
+
+    // Load gender filter
+    const gender = params.get('gender');
+    if (gender && ['all', 'kluk', 'holka', 'neutral'].includes(gender)) {
+        currentFilter = gender;
+        // Update UI
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            if (btn.dataset.filter === gender) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    }
+
+    // Load search
+    const search = params.get('search');
+    if (search) {
+        currentSearch = search;
+        const searchInput = document.getElementById('searchInput');
+        const searchStatus = document.getElementById('searchStatus');
+        if (searchInput) {
+            searchInput.value = search;
+            // Update search status indicator
+            if (looksLikeRegex(search)) {
+                try {
+                    new RegExp(search, 'i');
+                    searchStatus.textContent = '🎯 Regex';
+                    searchStatus.className = 'search-status regex-mode';
+                } catch (error) {
+                    searchStatus.textContent = '⚠️ Neplatný regex (hledám jako text)';
+                    searchStatus.className = 'search-status text-mode';
+                }
+            } else {
+                searchStatus.textContent = '🔍 Textové hledání';
+                searchStatus.className = 'search-status text-mode';
+            }
+        }
+
+        // Check if search pattern matches our letter filter format
+        const letterPattern = parseLetterPattern(search);
+        if (letterPattern) {
+            // Update state
+            if (letterPattern.firstLetter) {
+                selectedFirstLetter = letterPattern.firstLetter;
+            }
+            if (letterPattern.containsLetters.length > 0) {
+                selectedContainsLetters = letterPattern.containsLetters;
+            }
+
+            // Unfold the filters and highlight the letters
+            const alphabetFilter = document.getElementById('alphabetFilter');
+            const alphabetToggle = document.getElementById('alphabetToggle');
+            const containsFilter = document.getElementById('containsFilter');
+            const containsToggle = document.getElementById('containsToggle');
+
+            // Check if filters are side by side
+            const areSideBySide = window.innerWidth > 768;
+            const shouldUnfoldFirst = letterPattern.firstLetter;
+            const shouldUnfoldContains = letterPattern.containsLetters.length > 0;
+
+            // If side-by-side and at least one needs unfolding, unfold both
+            if (areSideBySide && (shouldUnfoldFirst || shouldUnfoldContains)) {
+                if (alphabetFilter && alphabetToggle) {
+                    alphabetFilter.classList.remove('hidden');
+                    alphabetToggle.classList.add('active');
+                }
+                if (containsFilter && containsToggle) {
+                    containsFilter.classList.remove('hidden');
+                    containsToggle.classList.add('active');
+                }
+            } else {
+                // Not side-by-side, unfold individually
+                if (shouldUnfoldFirst && alphabetFilter && alphabetToggle) {
+                    alphabetFilter.classList.remove('hidden');
+                    alphabetToggle.classList.add('active');
+                }
+                if (shouldUnfoldContains && containsFilter && containsToggle) {
+                    containsFilter.classList.remove('hidden');
+                    containsToggle.classList.add('active');
+                }
+            }
+
+            // Highlight the letter buttons
+            if (letterPattern.firstLetter) {
+                document.querySelectorAll('.letter-btn:not(.contains-letter-btn)').forEach(btn => {
+                    if (btn.dataset.letter === letterPattern.firstLetter) {
+                        btn.classList.add('active');
+                    }
+                });
+            }
+
+            if (letterPattern.containsLetters.length > 0) {
+                document.querySelectorAll('.contains-letter-btn').forEach(btn => {
+                    if (letterPattern.containsLetters.includes(btn.dataset.letter)) {
+                        btn.classList.add('active');
+                    }
+                });
+            }
+        }
+    }
+}
+
 // Load names from JSON file
 async function loadNames() {
     try {
@@ -166,6 +338,9 @@ function displayNames() {
         `;
         grid.appendChild(card);
     });
+
+    // Update URL with current filters
+    updateURL();
 }
 
 // Setup event listeners
@@ -400,5 +575,6 @@ function setupEventListeners() {
 // Initialize app
 document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
+    loadFiltersFromURL();
     loadNames();
 });

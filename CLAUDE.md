@@ -36,8 +36,33 @@ Czech baby name selection webapp built with plain HTML, CSS, and JavaScript. Dis
 12. Add reset button to the right of search input field to clear all filters
 13. Remove aux/ files from memory (use only for regenerating jmena.json)
 14. Create this CLAUDE.md documentation file
+15. Encode active filters to URL for sharing links with filter states
 
 ## Current Implementation Status
+
+### URL Filter Encoding
+**Status:** ✅ Complete
+
+Active filters are encoded in the URL for easy sharing and bookmarking:
+- **URL Parameters:**
+  - `gender`: Gender filter (kluk/holka/neutral, omitted if 'all')
+  - `search`: Search text or regex pattern (letter filters are encoded as regex in this parameter)
+
+- **Implementation** (app.js):
+  - `updateURL()`: Encodes current state to URL, called after each filter change
+  - `loadFiltersFromURL()`: Reads URL params on page load and applies filters
+  - `parseLetterPattern()`: Parses regex pattern to detect and extract letter filter components
+  - Uses `history.replaceState()` to update URL without page reload
+  - Letter filters generate regex patterns that are stored in the search parameter
+  - When loading from URL, if pattern matches letter filter format, UI is updated:
+    - Letter filter sections are unfolded (synchronized side-by-side if screen width > 768px)
+    - Corresponding letter buttons are highlighted
+    - State variables (selectedFirstLetter, selectedContainsLetters) are set
+
+- **Example URLs:**
+  - `?gender=kluk&search=^M` - Boys' names starting with M (unfolds first letter filter, highlights M)
+  - `?search=^M(?=.*A)(?=.*R).*` - Names starting with M containing A and R (unfolds both filters, highlights M, A, R)
+  - `?gender=holka&search=.*ie$` - Girls' names ending with "ie" (no letter filter UI changes)
 
 ### Reset Button Implementation
 **Status:** ✅ Complete
