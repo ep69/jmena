@@ -24,21 +24,8 @@
 
         <div class="controls">
             <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Hledat jméno nebo regex (např. ^M.* nebo .*a$)">
+                <input type="text" id="searchInput" placeholder="Hledat - podporuje regulární výrazy (např. ^M.* nebo .*a$)">
                 <div class="search-status" id="searchStatus"></div>
-            </div>
-
-            <div class="regex-examples-container">
-                <div class="regex-examples-label">
-                    Příklady hledání (podporuje
-                    <a href="https://regexr.com/" target="_blank" rel="noopener noreferrer" class="regex-help-link">regulární výrazy</a>):
-                </div>
-                <div class="regex-examples">
-                    <button class="regex-example" data-pattern="^A.*">Začíná A</button>
-                    <button class="regex-example" data-pattern=".*a$">Končí a</button>
-                    <button class="regex-example" data-pattern="^M.*[aá]$">M + končí a/á</button>
-                    <button class="regex-example" data-pattern="^.{3}$">3 znaky</button>
-                </div>
             </div>
 
             <div class="alphabet-filters-wrapper">

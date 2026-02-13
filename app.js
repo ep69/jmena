@@ -302,16 +302,6 @@ function setupEventListeners() {
         }
     });
 
-    // Regex example buttons
-    const exampleButtons = document.querySelectorAll('.regex-example');
-    exampleButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const pattern = button.dataset.pattern;
-            searchInput.value = pattern;
-            searchInput.dispatchEvent(new Event('input'));
-        });
-    });
-
     // Filter buttons
     const filterButtons = document.querySelectorAll('.filter-btn');
     filterButtons.forEach(button => {
