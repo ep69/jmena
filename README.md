@@ -27,7 +27,7 @@ Data pochází z oficiálního otevřeného datasetu Ministerstva vnitra ČR (st
 - **Dívky**: Zobrazí náhodný výběr z jmen pro dívky + neutrální jména (celkem 8,354)
 - **Neutrální**: Zobrazí náhodný výběr z neutrálních jmen (celkem 4,318)
 
-**Poznámka**: Bez aktivního vyhledávání se zobrazuje náhodných 24 jmen, aby se vešly na obrazovku. Při vyhledávání se zobrazí všechny odpovídající výsledky.
+**Poznámka**: Bez aktivního vyhledávání se zobrazuje náhodný výběr jmen přizpůsobený šířce obrazovky (cca 5 řádků), aby byl poslední řádek vždy plný. Při vyhledávání se zobrazí všechny odpovídající výsledky.
 
 ## Jak hledat
 

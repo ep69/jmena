@@ -102,6 +102,25 @@ function getRandomSubset(arr, count) {
     return result;
 }
 
+// Calculate number of columns in the grid
+function getGridColumnCount() {
+    const grid = document.getElementById('namesGrid');
+    const gridWidth = grid.offsetWidth;
+    const minColumnWidth = 200; // From CSS: minmax(200px, 1fr)
+    const gap = 15; // From CSS: gap: 15px
+
+    // Calculate how many columns fit
+    const columns = Math.floor((gridWidth + gap) / (minColumnWidth + gap));
+    return Math.max(1, columns);
+}
+
+// Calculate optimal number of names to display (multiple of columns)
+function calculateRandomSubsetSize() {
+    const columns = getGridColumnCount();
+    const targetRows = 5; // Aim for about 5 rows
+    return columns * targetRows;
+}
+
 // Display names in the grid
 function displayNames() {
     const filtered = getFilteredNames();
@@ -110,7 +129,7 @@ function displayNames() {
 
     // If no search is active and results are large, show random subset
     let namesToDisplay = filtered;
-    const randomSubsetSize = 24;
+    const randomSubsetSize = calculateRandomSubsetSize();
     const showRandomSubset = !currentSearch && filtered.length > randomSubsetSize;
 
     if (showRandomSubset) {
