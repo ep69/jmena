@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Výběr jména pro miminko</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🍼 Výběr jména pro miminko</h1>
+            <p class="subtitle">Procházejte česká jména a najděte to pravé</p>
+        </header>
+
+        <div class="controls">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Hledat jméno...">
+            </div>
+
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">Všechna</button>
+                <button class="filter-btn" data-filter="kluk">Chlapci</button>
+                <button class="filter-btn" data-filter="holka">Dívky</button>
+            </div>
+        </div>
+
+        <div class="stats">
+            <span id="resultsCount">0 jmen</span>
+        </div>
+
+        <div class="names-grid" id="namesGrid">
+            <!-- Names will be inserted here by JavaScript -->
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
