@@ -10,7 +10,16 @@
     <div class="container">
         <header>
             <h1>🍼 Výběr jména pro miminko</h1>
-            <p class="subtitle">Procházejte česká jména a najděte to pravé</p>
+            <p class="subtitle">
+                Procházejte česká jména a najděte to pravé
+                <span class="info-icon" title="Informace o datech">ℹ️</span>
+            </p>
+            <div class="info-box hidden" id="infoBox">
+                Všechna jména byla schválena českým Ministerstvem vnitra.
+                <a href="https://mv.gov.cz/clanek/seznam-jmen.aspx" target="_blank" rel="noopener noreferrer">
+                    Seznam jmen na stránkách MVČR
+                </a>
+            </div>
         </header>
 
         <div class="controls">
@@ -19,11 +28,17 @@
                 <div class="search-status" id="searchStatus"></div>
             </div>
 
-            <div class="regex-examples">
-                <button class="regex-example" data-pattern="^A.*">Začíná A</button>
-                <button class="regex-example" data-pattern=".*a$">Končí a</button>
-                <button class="regex-example" data-pattern="^M.*[aá]$">M + končí a/á</button>
-                <button class="regex-example" data-pattern="^.{3}$">3 znaky</button>
+            <div class="regex-examples-container">
+                <div class="regex-examples-label">
+                    Příklady hledání (podporuje
+                    <a href="https://regexr.com/" target="_blank" rel="noopener noreferrer" class="regex-help-link">regulární výrazy</a>):
+                </div>
+                <div class="regex-examples">
+                    <button class="regex-example" data-pattern="^A.*">Začíná A</button>
+                    <button class="regex-example" data-pattern=".*a$">Končí a</button>
+                    <button class="regex-example" data-pattern="^M.*[aá]$">M + končí a/á</button>
+                    <button class="regex-example" data-pattern="^.{3}$">3 znaky</button>
+                </div>
             </div>
 
             <div class="filter-buttons">

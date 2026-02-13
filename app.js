@@ -66,6 +66,25 @@ function getFilteredNames() {
     return filtered;
 }
 
+// Capitalize name properly (handles composite names)
+function capitalizeName(name) {
+    // Handle composite names with hyphens and spaces
+    return name
+        .trim() // Remove leading/trailing whitespace
+        .split(/([- ])/) // Split on hyphens and spaces, but keep the delimiters
+        .map(part => {
+            if (part === '-' || part === ' ') {
+                return part; // Keep delimiters as-is
+            }
+            if (part === '') {
+                return part; // Skip empty parts
+            }
+            // Capitalize first letter, lowercase the rest
+            return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
+        })
+        .join('');
+}
+
 // Get random subset of names using Fisher-Yates shuffle
 function getRandomSubset(arr, count) {
     const result = [];
@@ -96,6 +115,8 @@ function displayNames() {
         namesToDisplay = getRandomSubset(filtered, randomSubsetSize);
         resultsCount.textContent = `${randomSubsetSize} náhodných jmen z ${filtered.length}`;
     } else {
+        // When showing all results (not random), sort alphabetically
+        namesToDisplay = [...filtered].sort((a, b) => a.name.localeCompare(b.name, 'cs'));
         // Update results count
         resultsCount.textContent = `${filtered.length} ${filtered.length === 1 ? 'jméno' : filtered.length < 5 ? 'jména' : 'jmen'}`;
     }
@@ -119,7 +140,7 @@ function displayNames() {
         }
 
         card.innerHTML = `
-            <div class="name-text">${name.name}</div>
+            <div class="name-text">${capitalizeName(name.name)}</div>
             <div class="name-gender ${name.gender}">${genderLabel}</div>
         `;
         grid.appendChild(card);
@@ -155,6 +176,16 @@ function setupEventListeners() {
 
         displayNames();
     });
+
+    // Info icon toggle
+    const infoIcon = document.querySelector('.info-icon');
+    const infoBox = document.getElementById('infoBox');
+
+    if (infoIcon && infoBox) {
+        infoIcon.addEventListener('click', () => {
+            infoBox.classList.toggle('hidden');
+        });
+    }
 
     // Regex example buttons
     const exampleButtons = document.querySelectorAll('.regex-example');
