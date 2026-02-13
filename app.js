@@ -212,18 +212,55 @@ function setupEventListeners() {
     const alphabetToggle = document.getElementById('alphabetToggle');
     const alphabetFilter = document.getElementById('alphabetFilter');
 
-    alphabetToggle.addEventListener('click', () => {
-        alphabetFilter.classList.toggle('hidden');
-        alphabetToggle.classList.toggle('active');
-    });
-
     // Contains filter toggle
     const containsToggle = document.getElementById('containsToggle');
     const containsFilter = document.getElementById('containsFilter');
 
+    // Check if filters are side by side (based on screen width)
+    function areFiltersSideBySide() {
+        return window.innerWidth > 768;
+    }
+
+    alphabetToggle.addEventListener('click', () => {
+        const wasHidden = alphabetFilter.classList.contains('hidden');
+        alphabetFilter.classList.toggle('hidden');
+        alphabetToggle.classList.toggle('active');
+
+        // If filters are side by side, sync the other one
+        if (areFiltersSideBySide()) {
+            if (wasHidden) {
+                // Opening - also open the other one if closed
+                if (containsFilter.classList.contains('hidden')) {
+                    containsFilter.classList.remove('hidden');
+                    containsToggle.classList.add('active');
+                }
+            } else {
+                // Closing - also close the other one
+                containsFilter.classList.add('hidden');
+                containsToggle.classList.remove('active');
+            }
+        }
+    });
+
     containsToggle.addEventListener('click', () => {
+        const wasHidden = containsFilter.classList.contains('hidden');
         containsFilter.classList.toggle('hidden');
         containsToggle.classList.toggle('active');
+
+        // If filters are side by side, sync the other one
+        if (areFiltersSideBySide()) {
+            if (wasHidden) {
+                // Opening - also open the other one if closed
+                if (alphabetFilter.classList.contains('hidden')) {
+                    alphabetFilter.classList.remove('hidden');
+                    alphabetToggle.classList.add('active');
+                }
+            } else {
+                // Closing - also close the other one
+                alphabetFilter.classList.add('hidden');
+                alphabetToggle.classList.remove('active');
+            }
+        }
     });
 
     // Build combined search pattern from selected letters
